@@ -1,30 +1,61 @@
 <script>
-	export let name;
+
+	import Gallery from "./components/image_gallery.svelte";
+
+	let cameras = {"FHAZ" : [], "RHAZ" : [], "MAST" : [], "CHEMCAM" : [], "MAHLI" : [], "MARDI" : [], "NAVCAM" : []}
+
+	const requestOptions = {
+			method: 'GET',
+			redirect: 'follow'
+	};
+
+	function GetData(){
+
+		fetch("https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2021-2-3&api_key=eMBfXfG5KfgFjM8jkZqGdPo5b5nA2vMJMr9ab387", requestOptions)
+			.then(response => response.json())
+			.then(result => FilterData(result))
+			.catch(error => console.log('error', error));
+	}
+
+	function FilterData(data){
+		for(const photo of data.photos)
+		{
+
+			switch(photo.camera.name) {
+				case "FHAZ":
+					cameras.FHAZ.push(photo);
+					break;
+				case "RHAZ":
+					cameras.RHAZ.push(photo);
+					break;
+				case "MAST":
+					cameras.MAST.push(photo);
+					break;
+				case "CHEMCAM":
+					cameras.CHEMCAM.push(photo);
+					break;
+				case "MAHLI":
+					cameras.MAHLI.push(photo);
+					break;
+				case "MARDI":
+					cameras.MARDI.push(photo);
+					break;
+				case "NAVCAM":
+					cameras.NAVCAM.push(photo);
+					break;
+			}
+		}
+
+		cameras = cameras;
+
+		console.log(cameras)
+	}
+
+	GetData();
+
+
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<Gallery list={cameras.NAVCAM}/>
 </main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
