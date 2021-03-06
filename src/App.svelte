@@ -18,6 +18,7 @@
 	}
 
 	function FilterData(data){
+
 		for(const photo of data.photos)
 		{
 
@@ -57,5 +58,6 @@
 </script>
 
 <main>
+	<!-- {JSON.stringify(cameras)} -->
 	<Gallery list={cameras.NAVCAM}/>
 </main>
