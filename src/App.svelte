@@ -1,24 +1,31 @@
 <script>
-
 	import Gallery from "./components/image_gallery.svelte";
+	import Menu from "./components/Menu.svelte";
+	import { selected_camera, query_date } from './stores.js';
 
 	let cameras = {"FHAZ" : [], "RHAZ" : [], "MAST" : [], "CHEMCAM" : [], "MAHLI" : [], "MARDI" : [], "NAVCAM" : []}
 
 	const requestOptions = {
-			method: 'GET',
-			redirect: 'follow'
+		method: 'GET',
+		redirect: 'follow'
 	};
 
 	function GetData(){
 
-		fetch("https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2021-2-3&api_key=eMBfXfG5KfgFjM8jkZqGdPo5b5nA2vMJMr9ab387", requestOptions)
+		const reqeustURL = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${$query_date}&api_key=eMBfXfG5KfgFjM8jkZqGdPo5b5nA2vMJMr9ab387`;
+		console.log(reqeustURL);
+
+		fetch(reqeustURL, requestOptions)
 			.then(response => response.json())
 			.then(result => FilterData(result))
 			.catch(error => console.log('error', error));
 	}
 
+	// GetData($query_date);
+
 	function FilterData(data){
 
+		console.log(data)
 		for(const photo of data.photos)
 		{
 
@@ -52,12 +59,17 @@
 		console.log(cameras)
 	}
 
-	GetData();
-
-
 </script>
 
-<main>
-	<!-- {JSON.stringify(cameras)} -->
-	<Gallery list={cameras.NAVCAM}/>
+<main class="has-background-black-ter">
+	<p style="position: absolute; color: red; z-index: 100; padding: 10px">{$selected_camera} : {$query_date}</p>
+	<Menu rover_cameras={Object.keys(cameras)} on:query={GetData}/>
+	<Gallery image_list={cameras[`${$selected_camera}`]}/>
 </main>
+
+<style>
+	main{
+		width: 100vw;
+		height: 100vh;
+	}
+</style>

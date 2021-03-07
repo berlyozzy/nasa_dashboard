@@ -1,10 +1,11 @@
 <script>
-    export let list;
+    export let image_list;
 </script>
 
 
-<main class="has-background-black-ter">
-    {#each list as image}
+<main>
+    <span class="image-container">
+        {#each image_list as image}
         <span class="image-card">
             <figure class="image">
                 <img src={image.img_src} alt="curiosity" on:click={() => {window.open(image.img_src, "_blank")}} style="cursor:pointer">
@@ -17,18 +18,24 @@
             </span>
         </span>
     {/each}
+    </span>
 </main>
 
 <style>
     main{
-        display: grid;
-        gap: 10px;
-        grid-template-columns: repeat(4, 1fr);
-        grid-auto-flow: dense;
         width: 100vw;
         height: 100vh;
         overflow-y: auto;
         overflow-x: hidden;
+    }
+
+    .image-container{
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-flow: dense;
+        width: 100%;
+        height: max-content;
         padding: 10px;
     }
 
@@ -57,5 +64,6 @@
 
     .image-card{
         position: relative;
+        height: max-content;
     }
 </style>
